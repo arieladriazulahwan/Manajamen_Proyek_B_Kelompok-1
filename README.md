@@ -1,3 +1,9 @@
+Nama Kelompok:
+1.Marsya Cikita Rara Pratiwi_F55123004
+2.Vicram L_F55123005
+3.Natasya Labaso_F55123016
+4.Ariel Adriazul Ahwan_F55123071
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
