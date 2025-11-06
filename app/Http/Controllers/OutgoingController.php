@@ -10,8 +10,10 @@ class OutgoingController extends Controller
 {
     public function index()
     {
-        $items = Outgoing::all();
-        return view('outgoing.index', compact('items'));
+        // Ambil semua data outgoing
+        $outgoings = Outgoing::all();
+        // Kirim data ke view
+        return view('outgoing.index', compact('outgoings'));
     }
 
     public function create()
@@ -27,27 +29,54 @@ class OutgoingController extends Controller
             'incoming_id' => 'required|exists:incomings,id',
         ]);
 
-        // Ambil data dari Barang Masuk
         $incoming = Incoming::findOrFail($request->incoming_id);
 
-        // Simpan ke Barang Keluar
         Outgoing::create([
             'item_name' => $incoming->item_name,
             'quantity' => $incoming->quantity,
             'description' => $incoming->description,
         ]);
 
-        // Hapus dari Barang Masuk
         $incoming->delete();
 
-        return redirect()->route('outgoing.index')->with('success', 'Barang berhasil dikeluarkan.');
+        return redirect()->route('outgoing.index')->with('success', 'Barang berhasil dipindahkan ke Barang Keluar.');
+    }
+    public function incoming()
+    {
+        return $this->belongsTo(\App\Models\Incoming::class, 'item_id');
     }
 
+
     public function edit(Outgoing $outgoing)
-{
-    $items = \App\Models\Incoming::all(); // Ambil semua data barang masuk
-    return view('outgoing.edit', compact('outgoing', 'items'));
-}
+    {
+        $items = \App\Models\Incoming::all(); // Ambil semua barang masuk
+        return view('outgoing.edit', compact('outgoing', 'items'));
+    }
+
+    public function update(Request $request, Outgoing $outgoing)
+    {
+        $request->validate([
+            'item_name' => 'required|string',
+            'quantity' => 'required|integer',
+            'description' => 'nullable|string',
+        ]);
+    
+        // 1. Kembalikan data sebelumnya ke Incoming
+        Incoming::create([
+            'item_name' => $outgoing->item_name,
+            'quantity' => $outgoing->quantity,
+            'description' => $outgoing->description,
+        ]);
+    
+        // 2. Update data Outgoing
+        $outgoing->update([
+            'item_name' => $request->item_name,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+        ]);
+    
+        return redirect()->route('outgoing.index')->with('success', 'Data barang keluar berhasil diperbarui dan data sebelumnya dikembalikan ke barang masuk.');
+    }    
 
 
 
