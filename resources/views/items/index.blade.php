@@ -1,37 +1,38 @@
-{{-- resources/views/items/index.blade.php --}}
-<x-default-layout>
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-bold text-gray-800">Data Barang</h1>
-        <a href="/items/create" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">+ Tambah Barang</a>
-    </div>
+@extends('layouts.default-layout')
 
-    <table class="w-full bg-white shadow rounded overflow-hidden">
-        <thead class="bg-gray-100 text-left text-sm text-gray-600">
-            <tr>
-                <th class="px-4 py-2">Kode</th>
-                <th class="px-4 py-2">Nama Barang</th>
-                <th class="px-4 py-2">Stok</th>
-                <th class="px-4 py-2">Lokasi</th>
-                <th class="px-4 py-2">Aksi</th>
-            </tr>
-        </thead>
-        <tbody class="text-sm">
-            @foreach ($items as $item)
-            <tr class="border-t">
-                <td class="px-4 py-2">{{ $item->code }}</td>
-                <td class="px-4 py-2">{{ $item->name }}</td>
-                <td class="px-4 py-2">{{ $item->stock }}</td>
-                <td class="px-4 py-2">{{ $item->location }}</td>
-                <td class="px-4 py-2">
-                    <a href="/items/{{ $item->id }}/edit" class="text-blue-600 hover:underline">Edit</a>
-                    |
-                    <form action="/items/{{ $item->id }}" method="POST" class="inline">
-                        @csrf @method('DELETE')
-                        <button class="text-red-600 hover:underline" onclick="return confirm('Yakin?')">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</x-default-layout>
+@section('title', 'Data Barang di Gudang')
+
+@section('content')
+    <h2 class="text-2xl font-bold mb-4">Data Barang di Gudang</h2>
+
+    @if (session('success'))
+        <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if ($incomings->isEmpty())
+        <p class="text-gray-500">Tidak ada barang di gudang saat ini.</p>
+    @else
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded shadow">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 border text-left">Nama Barang</th>
+                        <th class="px-4 py-2 border text-left">Jumlah</th>
+                        <th class="px-4 py-2 border text-left">Deskripsi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($incomings as $incoming)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-2 border">{{ $incoming->item_name }}</td>
+                            <td class="px-4 py-2 border">{{ $incoming->quantity }}</td>
+                            <td class="px-4 py-2 border">{{ $incoming->description ?? '-' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+@endsection

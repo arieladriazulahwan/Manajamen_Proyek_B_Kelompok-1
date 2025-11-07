@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Outgoing extends Model
 {
-    use HasFactory;
+    protected $fillable = ['item_name', 'quantity', 'description'];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
 }

@@ -7,16 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $fillable = ['code', 'name', 'stock', 'location'];
+    use HasFactory;
 
-    public function up()
+    protected $fillable = ['name', 'quantity', 'description'];
+    
+    public function incomings()
     {
-        Schema::create('items', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->integer('stock');
-            $table->timestamps();
-        });
+        return $this->hasMany(Incoming::class);
+    }
+
+    public function outgoings()
+    {
+        return $this->hasMany(Outgoing::class);
     }
 
 }

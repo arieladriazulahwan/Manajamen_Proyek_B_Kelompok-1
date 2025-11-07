@@ -12,15 +12,16 @@ return new class extends Migration
      * @return void
      */
     public function up()
-{
-    Schema::create('incomings', function (Blueprint $table) {
-        $table->id();
-        $table->string('item_name');
-        $table->integer('quantity');
-        $table->text('description')->nullable();
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->string('name');
+            $table->decimal('price', 10, 2);
+            $table->timestamps();
+        });
+    }
+
 
     /**
      * Reverse the migrations.
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('products');
     }
 };
