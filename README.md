@@ -15,4 +15,5 @@ mecatat dan mengecek barang digudang berupa barang masuk, barang keluar, dan bar
 * d.	Dashboard dengan statistik barang dan transaksi
 
 ### UI/UX
-* Aplikasi (Figma) yang digunakan untuk mendesain web untuk berinteraksi lebih mudah: [Tampilan UI/UX]https://www.figma.com/design/UmHpAxwbzCmsdESC6MH2hI/Manajamen_Proyek_B_Invicytory?node-id=81-465&t=yc4kYU97YW0pUWqp-0
+* Aplikasi (Figma) yang digunakan untuk mendesain web untuk berinteraksi lebih mudah:
+  [Tampilan UI/UX]https://www.figma.com/design/UmHpAxwbzCmsdESC6MH2hI/Manajamen_Proyek_B_Invicytory?node-id=81-465&t=yc4kYU97YW0pUWqp-0
