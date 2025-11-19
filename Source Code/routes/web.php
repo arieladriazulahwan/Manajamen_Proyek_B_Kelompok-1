@@ -16,6 +16,7 @@ Route::resource('orders', OrderController::class);
 
 
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('/reports/pdf/{type?}', [ReportController::class, 'exportPdf'])->name('reports.pdf');
 Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/items', [ItemController::class, 'index']);
 Route::resource('/incoming', \App\Http\Controllers\IncomingController::class);

@@ -2,87 +2,107 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Incoming;
 use App\Models\Outgoing;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class OutgoingController extends Controller
 {
     public function index()
     {
-        // Ambil semua data outgoing
-        $outgoings = Outgoing::all();
-        // Kirim data ke view
+        $outgoings = Outgoing::latest()->get();
         return view('outgoing.index', compact('outgoings'));
     }
 
     public function create()
     {
-        // Menampilkan data dari Incoming yang tersedia
-        $incomings = Incoming::all();
-        return view('outgoing.create', compact('incomings'));
+        $items = Item::all();
+        return view('outgoing.create', compact('items'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'incoming_id' => 'required|exists:incomings,id',
+            'item_id' => 'required|exists:items,id',
+            'quantity' => 'required|integer|min:1',
+            'description' => 'nullable|string',
         ]);
 
-        $incoming = Incoming::findOrFail($request->incoming_id);
+        $item = Item::findOrFail($request->item_id);
 
-        Outgoing::create([
-            'item_name' => $incoming->item_name,
-            'quantity' => $incoming->quantity,
-            'description' => $incoming->description,
+        if ($item->quantity < $request->quantity) {
+            return back()->with('error', 'Stok barang tidak mencukupi!');
+        }
+
+        // Simpan ke tabel outgoings
+        $outgoing = Outgoing::create([
+            'item_id' => $item->id,
+            'item_name' => $item->name,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
         ]);
 
-        $incoming->delete();
+        // Kurangi stok di tabel items
+        $item->quantity -= $request->quantity;
+        $item->save();
 
-        return redirect()->route('outgoing.index')->with('success', 'Barang berhasil dipindahkan ke Barang Keluar.');
+        return redirect()->route('outgoing.index')->with('success', 'Barang keluar berhasil disimpan dan stok diperbarui.');
     }
-    public function incoming()
-    {
-        return $this->belongsTo(\App\Models\Incoming::class, 'item_id');
-    }
-
 
     public function edit(Outgoing $outgoing)
     {
-        $items = \App\Models\Incoming::all(); // Ambil semua barang masuk
+        $items = Item::all();
         return view('outgoing.edit', compact('outgoing', 'items'));
     }
 
     public function update(Request $request, Outgoing $outgoing)
     {
         $request->validate([
-            'item_name' => 'required|string',
-            'quantity' => 'required|integer',
+            'item_id' => 'required|exists:items,id',
+            'quantity' => 'required|integer|min:1',
             'description' => 'nullable|string',
         ]);
-    
-        // 1. Kembalikan data sebelumnya ke Incoming
-        Incoming::create([
-            'item_name' => $outgoing->item_name,
-            'quantity' => $outgoing->quantity,
-            'description' => $outgoing->description,
-        ]);
-    
-        // 2. Update data Outgoing
+
+        $oldItem = Item::find($outgoing->item_id);
+        $newItem = Item::find($request->item_id);
+
+        // Kembalikan stok lama
+        if ($oldItem) {
+            $oldItem->quantity += $outgoing->quantity;
+            $oldItem->save();
+        }
+
+        // Pastikan stok cukup di item baru
+        if ($newItem->quantity < $request->quantity) {
+            return back()->with('error', 'Stok barang tidak mencukupi untuk perubahan!');
+        }
+
+        // Kurangi stok baru
+        $newItem->quantity -= $request->quantity;
+        $newItem->save();
+
+        // Update data outgoing
         $outgoing->update([
-            'item_name' => $request->item_name,
+            'item_id' => $newItem->id,
+            'item_name' => $newItem->name,
             'quantity' => $request->quantity,
             'description' => $request->description,
         ]);
-    
-        return redirect()->route('outgoing.index')->with('success', 'Data barang keluar berhasil diperbarui dan data sebelumnya dikembalikan ke barang masuk.');
-    }    
 
-
+        return redirect()->route('outgoing.index')->with('success', 'Data barang keluar berhasil diperbarui.');
+    }
 
     public function destroy(Outgoing $outgoing)
     {
+        $item = $outgoing->item;
+
+        if ($item) {
+            $item->quantity += $outgoing->quantity; // jika dihapus, stok dikembalikan
+            $item->save();
+        }
+
         $outgoing->delete();
-        return redirect()->route('outgoing.index')->with('success', 'Barang keluar dihapus.');
+
+        return redirect()->route('outgoing.index')->with('success', 'Barang keluar dihapus dan stok dikembalikan.');
     }
 }

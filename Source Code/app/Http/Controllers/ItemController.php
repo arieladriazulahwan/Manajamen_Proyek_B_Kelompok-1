@@ -9,7 +9,8 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $incomings = \App\Models\Incoming::all();
-        return view('items.index', compact('incomings'));
+        $items = \App\Models\Item::all();
+        return view('items.index', compact('items'));
     }
+
 }
