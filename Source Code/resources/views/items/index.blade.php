@@ -11,7 +11,7 @@
         </div>
     @endif
 
-    @if ($incomings->isEmpty())
+    @if ($items->isEmpty())
         <p class="text-gray-500">Tidak ada barang di gudang saat ini.</p>
     @else
         <div class="overflow-x-auto">
@@ -24,11 +24,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($incomings as $incoming)
+                    @foreach ($items as $item)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-2 border">{{ $incoming->item_name }}</td>
-                            <td class="px-4 py-2 border">{{ $incoming->quantity }}</td>
-                            <td class="px-4 py-2 border">{{ $incoming->description ?? '-' }}</td>
+                            <td class="px-4 py-2 border">{{ $item->name }}</td>
+                            <td class="px-4 py-2 border">{{ $item->quantity }}</td>
+                            <td class="px-4 py-2 border">{{ $item->description ?? '-' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

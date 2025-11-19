@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Outgoing extends Model
 {
-    protected $fillable = ['item_name', 'quantity', 'description'];
+    protected $fillable = ['item_name', 'quantity', 'description',];
 
+    // Barang keluar berasal dari satu Item
     public function item()
     {
         return $this->belongsTo(Item::class);

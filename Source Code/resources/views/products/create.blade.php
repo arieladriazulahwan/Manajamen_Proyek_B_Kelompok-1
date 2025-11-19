@@ -8,24 +8,30 @@
 <form action="{{ route('products.store') }}" method="POST" class="space-y-4">
     @csrf
     <div>
-        <label class="block font-medium">Nama Produk</label>
-        <input type="text" name="name" class="w-full p-2 border rounded" required>
-    </div>
-
-    <div>
-        <label class="block font-medium">Kategori</label>
-        <select name="category_id" class="w-full p-2 border rounded" required>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+        <label class="block font-medium">Pilih Item</label>
+        <select name="item_id" class="w-full border p-2 rounded" required>
+            @foreach ($items as $item)
+                <option value="{{ $item->id }}">{{ $item->name }} (Stok: {{ $item->quantity }})</option>
             @endforeach
         </select>
     </div>
 
     <div>
-        <label class="block font-medium">Harga</label>
-        <input type="number" name="price" class="w-full p-2 border rounded" required>
+        <label class="block font-medium">Pilih Kategori</label>
+        <select name="category_id" class="w-full border p-2 rounded" required>
+            @foreach ($categories as $cat)
+                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+            @endforeach
+        </select>
     </div>
 
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
+    <div>
+        <label class="block font-medium">Harga Produk</label>
+        <input type="number" name="price" step="0.01" class="w-full border p-2 rounded" required>
+    </div>
+
+    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+        Simpan Produk
+    </button>
 </form>
 @endsection

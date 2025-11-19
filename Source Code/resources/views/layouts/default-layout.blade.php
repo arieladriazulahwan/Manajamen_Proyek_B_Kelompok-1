@@ -18,11 +18,11 @@
                 <a href="/items" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Data Barang</a>
                 <a href="/incoming" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Barang Masuk</a>
                 <a href="/outgoing" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Barang Keluar</a>
-                <a href="/reports" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Laporan</a>
-                <a href="/settings" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Pengaturan</a>
                 <a href="/categories" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Kategori</a>
                 <a href="/products" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Produk</a>
                 <a href="/orders" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Pesanan</a>
+                <a href="/reports" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Laporan</a>
+                <a href="/settings" class="block px-6 py-2 text-gray-700 hover:bg-blue-100">Pengaturan</a>
             </nav>
         </aside>
 

@@ -14,4 +14,10 @@ class Incoming extends Model
         return $this->belongsTo(Item::class);
     }
 
+     // Relasi ke Item (1 Incoming punya banyak Item)
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
 }
